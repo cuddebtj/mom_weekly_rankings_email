@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mom-weekly-rankings-email"
+version = "0.1.0"
+description = ""
+authors = ["Tim Cuddeback <cuddebtj@gmail.com>"]
+readme = "README.md"
+packages = [{include = "mom_weekly_rankings_email"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+PyYAML = "^6.0"
+psycopg2-binary = "^2.9.4"
+pandas = "^1.5.0"
+google-api-python-client = "^2.64.0"
+oauth2client = "^4.1.3"
+google-auth-oauthlib = "^0.5.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
