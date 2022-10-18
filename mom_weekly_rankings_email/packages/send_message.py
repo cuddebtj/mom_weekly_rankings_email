@@ -47,7 +47,7 @@ def send_weekly_rankings(week, plain_body, html_body):
         msg = MIMEMultipart('alternative')
         msg['Subject'] = f'MoM FFBL Weekly Rankings: Week {week}'
         msg['From'] = f'{my_email}'
-        msg['To'] = f"{'; '.join(emails)}"
+        msg['To'] = f"{';'.join(emails)}"
         msg.attach(MIMEText(plain_body, 'plain'))
         msg.attach(MIMEText(html_body, 'html'))
         raw = base64.urlsafe_b64encode(msg.as_bytes())
