@@ -4,6 +4,7 @@ import pandas as pd
 from io import StringIO
 from pathlib import Path
 
+
 def get_data(path):
     query = """
     SELECT "Week"
@@ -35,6 +36,7 @@ def get_data(path):
     WHERE "Week" = (SELECT max("Week") FROM prod.reg_season_results)
     """
     return DatabaseCursor().copy_from_psql(query)
+
 
 class DatabaseCursor(object):
     def __init__(self):
