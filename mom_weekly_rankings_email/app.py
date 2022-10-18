@@ -80,7 +80,7 @@ html_rankings = build_table(
 )
 
 salutation = salutation_list["salutations"][
-    randint(0, len(salutation_list["salutations"]))
+    randint(0, len(salutation_list["salutations"])-1)
 ]
 
 plain_body = """\
