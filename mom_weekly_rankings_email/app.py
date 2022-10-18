@@ -22,7 +22,7 @@ rankings = df[["Team", "Manager", "Cur. Wk Rk", "Prev. Wk Rk", "2pt Ttl", "Ttl P
 
 html_rankings = build_table(rankings, "grey_dark", font_family="Arial", text_align="center", width_dict=["200px", "100px" , "40px", "40px", "40px", "40px", "40px", "40px", "40px", "40px", "80px", "40px", "60px", "80px", "60px", "40px", "60px", "200px", "100px", "60px", "40px"])
 
-salutation = salutation_list["salutations"][randint(0, len(salutation_list))]
+salutation = salutation_list["salutations"][randint(0, len(salutation_list["salutations"]))]
 
 plain_body = """\
     Here is the currently weekly rankings!
