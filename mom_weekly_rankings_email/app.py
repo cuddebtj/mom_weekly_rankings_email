@@ -18,11 +18,70 @@ df = get_data(PRIVATE)
 
 cur_week = df["Week"].max()
 
-rankings = df[["Team", "Manager", "Cur. Wk Rk", "Prev. Wk Rk", "2pt Ttl", "Ttl Pts Win", "Ttl Pts Win Rk", "Win Ttl", "Loss Ttl", "W/L Rk", "Ttl Pts", "Ttl Pts Rk", "Avg Pts", "Ttl Opp Pts", "Avg Opp Pts", "Wk W/L", "Wk Pts", "Opp Team", "Opp Manager", "Opp Wk Pts", "Opp Wk Pts Rk"]]
+rankings = df[
+    [
+        "Team",
+        "Manager",
+        "Cur. Wk Rk",
+        "Prev. Wk Rk",
+        "2pt Ttl",
+        "2pt Ttl Rk",
+        "Ttl Pts Win",
+        "Ttl Pts Win Rk",
+        "Win Ttl",
+        "Loss Ttl",
+        "W/L Rk",
+        "Ttl Pts",
+        "Ttl Pts Rk",
+        "Avg Pts",
+        "Ttl Opp Pts",
+        "Avg Opp Pts",
+        "Wk W/L",
+        "Wk Pts W/L",
+        "Wk Pts",
+        "Wk Pts Rk",
+        "Opp Team",
+        "Opp Manager",
+        "Opp Wk Pts",
+        "Opp Wk Pts Rk",
+    ]
+]
 
-html_rankings = build_table(rankings, "grey_dark", font_family="Arial", text_align="center", width_dict=["200px", "100px" , "40px", "40px", "40px", "40px", "40px", "40px", "40px", "40px", "80px", "40px", "60px", "80px", "60px", "40px", "60px", "200px", "100px", "60px", "40px"])
+html_rankings = build_table(
+    rankings,
+    "grey_dark",
+    font_family="Arial",
+    text_align="center",
+    width_dict=[
+        "200px", # Team
+        "100px", # Manager
+        "40px", # Cur. Wk Rk
+        "40px", # Prev. Wk Rk
+        "40px", # 2pt Ttl
+        "40px", # 2pt Ttl Rk
+        "40px", # Ttl Pts Win
+        "40px", # Ttl Pts Win Rk
+        "40px", # Win Ttl
+        "40px", # Loss Ttl
+        "40px", # W/L Rk
+        "80px", # Ttl Pts
+        "40px", # Ttl Pts Rk
+        "60px", # Avg Pts
+        "80px", # Ttl Opp Pts
+        "60px", # Avg Opp Pts
+        "40px", # Wk W/L
+        "40px", # Wk Pts W/L
+        "60px", # Wk Pts
+        "200px", # Opp Team
+        "100px", # Opp Manager
+        "60px", # Opp Wk Pts
+        "40px", # Opp Wk Pts Rk
+    ],
+)
 
-salutation = salutation_list["salutations"][randint(0, len(salutation_list["salutations"]))]
+salutation = salutation_list["salutations"][
+    randint(0, len(salutation_list["salutations"]))
+]
 
 plain_body = """\
     Here is the currently weekly rankings!
@@ -64,7 +123,9 @@ html_body = """\
 </html>
 """
 
-plain_body = plain_body.format(table=tabulate(rankings, headers="firstrow", tablefmt="grid"), salutation=salutation)
+plain_body = plain_body.format(
+    table=tabulate(rankings, headers="firstrow", tablefmt="grid"), salutation=salutation
+)
 html_body = html_body.format(table=html_rankings, salutation=salutation)
 
 send_weekly_rankings(cur_week, plain_body, html_body)
