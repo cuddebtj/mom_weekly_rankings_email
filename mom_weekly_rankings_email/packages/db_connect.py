@@ -4,6 +4,37 @@ import pandas as pd
 from io import StringIO
 from pathlib import Path
 
+def get_data(path):
+    query = """
+    SELECT "Week"
+    , "Team"
+    , "Manager"
+    , "Cur. Wk Rk"
+    , "Prev. Wk Rk"
+    , "2pt Ttl"
+    , "2pt Ttl Rk"
+    , "Ttl Pts Win"
+    , "Ttl Pts Win Rk"
+    , "Win Ttl"
+    , "Loss Ttl"
+    , "W/L Rk"
+    , "Ttl Pts"
+    , "Ttl Pts Rk"
+    , "Avg Pts"
+    , "Ttl Opp Pts"
+    , "Avg Opp Pts"
+    , "Wk W/L"
+    , "Wk Pts W/L"
+    , "Wk Pts"
+    , "Wk Pts Rk"
+    , "Opp Team"
+    , "Opp Manager"
+    , "Opp Wk Pts"
+    , "Opp Wk Pts Rk"
+    FROM prod.reg_season_results
+    WHERE "Week" = (SELECT max("Week") FROM prod.reg_season_results)
+    """
+    return DatabaseCursor().copy_from_psql(query)
 
 class DatabaseCursor(object):
     def __init__(self):

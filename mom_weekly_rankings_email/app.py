@@ -1,63 +1,70 @@
 import yaml
+import pandas as pd
 from pathlib import Path
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+from pretty_html_table import build_table
+from tabulate import tabulate
+from random import randint
 
 
+from packages.db_connect import get_data
+from packages.send_message import send_weekly_rankings
 
-import base64
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+PRIVATE = list(Path().cwd().glob("**/private.yaml"))[0]
+SALUTAIONS = list(Path().cwd().glob("**/salutations.yaml"))[0]
+with open(SALUTAIONS) as file:
+    salutation_list = yaml.load(file, Loader=yaml.SafeLoader)
 
-G_OAUTH_CLIENT = list(Path().cwd().glob("**/client-secret.json"))[0]
-CREDS_PATH = list(Path().cwd().glob("**/google-credentials.yaml"))[0]
-PRIVATE_YAML = list(Path().cwd().glob("**/private.yaml"))[0]
+df = get_data(PRIVATE)
 
-with open(PRIVATE_YAML) as file:
-    private = yaml.load(file, Loader=yaml.SafeLoader)
+cur_week = df["Week"].max()
 
-emails = private['email_list']
-creds = None
+rankings = df[["Team", "Manager", "Cur. Wk Rk", "Prev. Wk Rk", "2pt Ttl", "Ttl Pts Win", "Ttl Pts Win Rk", "Win Ttl", "Loss Ttl", "W/L Rk", "Ttl Pts", "Ttl Pts Rk", "Avg Pts", "Ttl Opp Pts", "Avg Opp Pts", "Wk W/L", "Wk Pts", "Opp Team", "Opp Manager", "Opp Wk Pts", "Opp Wk Pts Rk"]]
 
-SCOPES = ['https://www.googleapis.com/auth/gmail.send',
-          'https://www.googleapis.com/auth/gmail.modify']
+html_rankings = build_table(rankings, "grey_dark", font_family="Arial", text_align="center", width_dict=["200px", "100px" , "40px", "40px", "40px", "40px", "40px", "40px", "40px", "40px", "80px", "40px", "60px", "80px", "60px", "40px", "60px", "200px", "100px", "60px", "40px"])
 
-if CREDS_PATH.is_file():
-    creds = Credentials.from_authorized_user_file(CREDS_PATH, SCOPES)
+salutation = salutation_list["salutations"][randint(0, len(salutation_list))]
 
-if not creds and not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-            creds.refresn(Request())
-    else:
-        flow = InstalledAppFlow.from_client_secrets_file(G_OAUTH_CLIENT, SCOPES)
-    with open(CREDS_PATH, 'w') as token:
-        yaml.dump(creds, token)
+plain_body = """\
+    Here is the currently weekly rankings!
+    Keep an eye out for more emails/add this email to your safe senders so it doesn't got to spam.
 
-try:
-    service = build('gmail', 'v1', credentials=creds)
+    {table}
 
-    my_email = 'menofmadisonffble@gmail.com'
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = 'MoM FFBL Weekly Rankings'
-    msg['From'] = f'{my_email}'
-    msg['To'] = f'cuddebtj@gmail.com'
-    msgPlain = 'This is my first email!'
-    msgHtml = '<b>This is my first email!</b>'
-    msg.attach(MIMEText(msgPlain, 'plain'))
-    msg.attach(MIMEText(msgHtml, 'html'))
-    raw = base64.urlsafe_b64encode(msg.as_bytes())
-    raw = raw.decode()
-    body = {'raw': raw}
+    {salutation}
 
-    message1 = body
-    message = (
-        service.users().messages().send(
-            userId="me", body=message1).execute())
-    print('Message Id: %s' % message['id'])
+    Column Info:
+        - Ttl Pts Win = Total wins against league median
+        - Ttl Pts Rk = Rank of total points scored this season, used as tie breaker
+        - Avg Pts = Average points scored per week to this point
+        - Ttl Opp Pts = Total points against
+        - Avg Opp Pts = Average points against
+        - Wk Pts W/L = Win or Loss against league median current week
+"""
 
-except HttpError as error:
-    print(f'An error occurred: {error}')
+html_body = """\
+<html>
+  <body>
+    <h1>Here is the currently weekly rankings!</h1>
+	<br>
+    <h2>Keep an eye out for more emails/add this email to your safe senders so it doesn't got to spam.</h2>
+	<br>
+	{table}
+    <br>
+	<h2>{salutation}</h2>
+    <br>
+    <p>Column Info:</p>
+    <ul>
+        <li>Ttl Pts Win = Total wins against league median</li>
+        <li>Ttl Pts Rk = Rank of total points scored this season, used as tie breaker</li>
+        <li>Avg Pts = Average points scored per week to this point</li>
+        <li>Avg Opp Pts = Average points against</li>
+        <li>Wk Pts W/L = Win or Loss against league median current week</li>
+    </ul>
+  </body>
+</html>
+"""
 
+plain_body = plain_body.format(table=tabulate(rankings, headers="firstrow", tablefmt="grid"), salutation=salutation)
+html_body = html_body.format(table=html_rankings, salutation=salutation)
+
+send_weekly_rankings(cur_week, plain_body, html_body)
