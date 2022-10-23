@@ -1,11 +1,13 @@
 import psycopg2
 import yaml
 import pandas as pd
+import logging
 from io import StringIO
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
 
-def get_data(path):
+def get_data():
     query = """
     SELECT "Week"
     , "Team"
@@ -48,8 +50,12 @@ class DatabaseCursor(object):
         """
         credential_file = list(Path().cwd().glob("**/private.yaml"))[0]
 
-        with open(credential_file) as file:
-            self.credentials = yaml.load(file, Loader=yaml.SafeLoader)
+        try:
+            with open(credential_file) as file:
+                self.credentials = yaml.load(file, Loader=yaml.SafeLoader)
+
+        except Exception as e:
+            logger.critical(f'Error: {e}', exc_info=True)
 
         self.db_url = self.credentials["heroku_db_url"]
 
@@ -57,10 +63,15 @@ class DatabaseCursor(object):
         """
         Set up connection and cursor
         """
-        self.conn = psycopg2.connect(
-            self.db_url,
-            sslmode="require",
-        )
+        try:
+            self.conn = psycopg2.connect(
+                self.db_url,
+                sslmode="require",
+            )
+
+        except Exception as e:
+            logger.critical(f'Error: {e}', exc_info=True)
+
         self.cur = self.conn.cursor()
 
         return self.cur
@@ -71,12 +82,15 @@ class DatabaseCursor(object):
 
         exc_results = bool
         """
+        try:
+            if exc_result == True:
+                self.conn.commit()
 
-        if exc_result == True:
-            self.conn.commit()
+            self.cur.close()
+            self.conn.close()
 
-        self.cur.close()
-        self.conn.close()
+        except Exception as e:
+            logger.critical(f'Error: {e}', exc_info=True)
 
     def copy_from_psql(self, query):
         """
@@ -91,9 +105,13 @@ class DatabaseCursor(object):
         sql_query = f"COPY ({query}) TO STDOUT WITH (FORMAT CSV, HEADER TRUE);"
         buffer = StringIO()
 
-        cursor.copy_expert(sql_query, buffer)
-        buffer.seek(0)
-        df = pd.read_csv(buffer)
-        self.__exit__(exc_result=True)
+        try:
+            cursor.copy_expert(sql_query, buffer)
+            buffer.seek(0)
+            df = pd.read_csv(buffer)
+            self.__exit__(exc_result=True)
 
-        return df
+            return df
+
+        except Exception as e:
+            logger.error(f'Error: {e}', exc_info=True)
