@@ -39,7 +39,7 @@ def send_weekly_rankings(week, plain_body, html_body):
 
     _to = ';'.join(private["email_list"])
     _from = private["mom_email"]
-    _to = 'cuddebtj@gmail.com'
+    # _to = 'cuddebtj@gmail.com'
 
     try:
         context = ssl.create_default_context()
