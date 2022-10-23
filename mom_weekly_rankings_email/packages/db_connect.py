@@ -48,7 +48,7 @@ class DatabaseCursor(object):
         credential_file = path to private yaml file
         kwargs = {option_schema: "raw"}
         """
-        credential_file = list(Path().cwd().glob("**/private.yaml"))[0]
+        credential_file = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/private.yaml")
 
         try:
             with open(credential_file) as file:
