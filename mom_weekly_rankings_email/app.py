@@ -19,7 +19,7 @@ with open(PRIVATE_YAML) as file:
     private = yaml.load(file, Loader=yaml.SafeLoader)
 
 LOG_CONFIG_PATH = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/logger_config.yaml")
-with open(LOG_CONFIG_PATH, 'rb') as config:
+with open(LOG_CONFIG_PATH, 'r') as config:
     log_config = yaml.safe_load(config.read())
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ def send_weekly_rankings(week, plain_body, html_body):
             msg["Subject"] = f"MoM FFBL Weekly Rankings: Week {week}"
             msg["From"] = f"{_from}"
             msg["To"] = f"{_to}"
-            jmu_logo = MIMEImage(open(JMU_LOGO_PATH, 'r').read())
+            jmu_logo = MIMEImage(open(JMU_LOGO_PATH, 'rb').read())
             jmu_logo.add_header('Content-ID', '<jmu_logo>')
             msg.attach(jmu_logo)
             msg.attach(MIMEText(plain_body, "plain"))
@@ -202,4 +202,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    print("Done")
