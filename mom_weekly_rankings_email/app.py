@@ -14,19 +14,19 @@ from random import randint
 
 from packages.db_connect import get_data
 
-PRIVATE_YAML = list(Path().cwd().glob("**/private.yaml"))[0]
+PRIVATE_YAML = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/private.yaml")
 with open(PRIVATE_YAML) as file:
     private = yaml.load(file, Loader=yaml.SafeLoader)
 
-LOG_CONFIG_PATH = list(Path().cwd().glob("**/logger_config.yaml"))[0]
+LOG_CONFIG_PATH = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/logger_config.yaml")
 with open(LOG_CONFIG_PATH, 'r') as config:
     log_config = yaml.safe_load(config.read())
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 
 try:
-    JMU_LOGO_PATH = list(Path().cwd().glob("**/JMU-Logo-RGB-vert-purple.png"))[0]
-    SALUTAIONS = list(Path().cwd().glob("**/salutations.yaml"))[0]
+    JMU_LOGO_PATH = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/JMU-Logo-RGB-vert-purple.png")
+    SALUTAIONS = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/salutations.yaml")
 
     with open(SALUTAIONS) as file:
         salutation_list = yaml.load(file, Loader=yaml.SafeLoader)
