@@ -53,29 +53,29 @@ html_rankings = build_table(
     font_family="Arial",
     text_align="center",
     width_dict=[
-        "200px",  # Team
-        "100px",  # Manager
-        "40px",  # Cur. Wk Rk
-        "40px",  # Prev. Wk Rk
-        "40px",  # 2pt Ttl
-        "40px",  # 2pt Ttl Rk
-        "40px",  # Ttl Pts Win
-        "40px",  # Ttl Pts Win Rk
-        "40px",  # Win Ttl
-        "40px",  # Loss Ttl
-        "40px",  # W/L Rk
-        "80px",  # Ttl Pts
-        "40px",  # Ttl Pts Rk
-        "60px",  # Avg Pts
-        "80px",  # Ttl Opp Pts
-        "60px",  # Avg Opp Pts
-        "40px",  # Wk W/L
-        "40px",  # Wk Pts W/L
-        "60px",  # Wk Pts
-        "200px",  # Opp Team
-        "100px",  # Opp Manager
-        "60px",  # Opp Wk Pts
-        "40px",  # Opp Wk Pts Rk
+        "200px", # Team
+        "100px", # Manager
+        "40px", # Cur. Wk Rk
+        "40px", # Prev. Wk Rk
+        "40px", # 2pt Ttl
+        "40px", # 2pt Ttl Rk
+        "40px", # Ttl Pts Win
+        "40px", # Ttl Pts Win Rk
+        "40px", # Win Ttl
+        "40px", # Loss Ttl
+        "40px", # W/L Rk
+        "80px", # Ttl Pts
+        "40px", # Ttl Pts Rk
+        "60px", # Avg Pts
+        "80px", # Ttl Opp Pts
+        "60px", # Avg Opp Pts
+        "40px", # Wk W/L
+        "40px", # Wk Pts W/L
+        "60px", # Wk Pts
+        "200px", # Opp Team
+        "100px", # Opp Manager
+        "60px", # Opp Wk Pts
+        "40px", # Opp Wk Pts Rk
     ],
 )
 
