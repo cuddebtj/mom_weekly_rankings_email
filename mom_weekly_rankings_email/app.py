@@ -84,17 +84,6 @@ def main():
                 "W/L Rk",
                 "Ttl Pts",
                 "Ttl Pts Rk",
-                "Avg Pts",
-                "Ttl Opp Pts",
-                "Avg Opp Pts",
-                "Wk W/L",
-                "Wk Pts W/L",
-                "Wk Pts",
-                "Wk Pts Rk",
-                "Opp Team",
-                "Opp Manager",
-                "Opp Wk Pts",
-                "Opp Wk Pts Rk",
             ]
         ]
 
@@ -121,16 +110,6 @@ def main():
                 "40px", # W/L Rk
                 "80px", # Ttl Pts
                 "40px", # Ttl Pts Rk
-                "60px", # Avg Pts
-                "80px", # Ttl Opp Pts
-                "60px", # Avg Opp Pts
-                "40px", # Wk W/L
-                "40px", # Wk Pts W/L
-                "60px", # Wk Pts
-                "200px", # Opp Team
-                "100px", # Opp Manager
-                "60px", # Opp Wk Pts
-                "40px", # Opp Wk Pts Rk
             ],
         )
 
@@ -159,10 +138,6 @@ def main():
             Column Info:
                 - Ttl Pts Win = Total wins against league median
                 - Ttl Pts Rk = Rank of total points scored this season, used as tie breaker
-                - Avg Pts = Average points scored per week to this point
-                - Ttl Opp Pts = Total points against
-                - Avg Opp Pts = Average points against
-                - Wk Pts W/L = Win or Loss against league median current week
         """
 
         html_body = """\
@@ -182,9 +157,6 @@ def main():
             <ul>
                 <li>Ttl Pts Win = Total wins against league median</li>
                 <li>Ttl Pts Rk = Rank of total points scored this season, used as tie breaker</li>
-                <li>Avg Pts = Average points scored per week to this point</li>
-                <li>Avg Opp Pts = Average points against</li>
-                <li>Wk Pts W/L = Win or Loss against league median current week</li>
             </ul>
         </body>
         </html>
