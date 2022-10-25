@@ -23,17 +23,6 @@ def get_data():
     , "W/L Rk"
     , "Ttl Pts"
     , "Ttl Pts Rk"
-    , "Avg Pts"
-    , "Ttl Opp Pts"
-    , "Avg Opp Pts"
-    , "Wk W/L"
-    , "Wk Pts W/L"
-    , "Wk Pts"
-    , "Wk Pts Rk"
-    , "Opp Team"
-    , "Opp Manager"
-    , "Opp Wk Pts"
-    , "Opp Wk Pts Rk"
     FROM prod.reg_season_results
     WHERE "Week" = (SELECT max("Week") FROM prod.reg_season_results)
     """
