@@ -7,6 +7,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def get_data():
     query = """
     SELECT "Week"
@@ -37,14 +38,16 @@ class DatabaseCursor(object):
         credential_file = path to private yaml file
         kwargs = {option_schema: "raw"}
         """
-        credential_file = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/private.yaml")
+        credential_file = Path(
+            "/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/private.yaml"
+        )
 
         try:
             with open(credential_file) as file:
                 self.credentials = yaml.load(file, Loader=yaml.SafeLoader)
 
         except Exception as e:
-            logger.critical(f'Error: {e}', exc_info=True)
+            logger.critical(f"Error: {e}", exc_info=True)
 
         self.db_url = self.credentials["heroku_db_url"]
 
@@ -59,7 +62,7 @@ class DatabaseCursor(object):
             )
 
         except Exception as e:
-            logger.critical(f'Error: {e}', exc_info=True)
+            logger.critical(f"Error: {e}", exc_info=True)
 
         self.cur = self.conn.cursor()
 
@@ -79,7 +82,7 @@ class DatabaseCursor(object):
             self.conn.close()
 
         except Exception as e:
-            logger.critical(f'Error: {e}', exc_info=True)
+            logger.critical(f"Error: {e}", exc_info=True)
 
     def copy_from_psql(self, query):
         """
@@ -103,4 +106,4 @@ class DatabaseCursor(object):
             return df
 
         except Exception as e:
-            logger.error(f'Error: {e}', exc_info=True)
+            logger.error(f"Error: {e}", exc_info=True)
