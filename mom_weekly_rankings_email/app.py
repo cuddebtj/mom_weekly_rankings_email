@@ -14,45 +14,55 @@ from random import randint
 
 from packages.db_connect import get_data
 
-PRIVATE_YAML = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/private.yaml")
+PRIVATE_YAML = Path(
+    "/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/private.yaml"
+)
 with open(PRIVATE_YAML) as file:
     private = yaml.load(file, Loader=yaml.SafeLoader)
 
-LOG_CONFIG_PATH = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/logger_config.yaml")
-with open(LOG_CONFIG_PATH, 'r') as config:
+LOG_CONFIG_PATH = Path(
+    "/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/logger_config.yaml"
+)
+with open(LOG_CONFIG_PATH, "r") as config:
     log_config = yaml.safe_load(config.read())
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 
 try:
-    JMU_LOGO_PATH = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/JMU-Logo-RGB-vert-purple.png")
-    SALUTAIONS = Path("/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/salutations.yaml")
+    JMU_LOGO_PATH = Path(
+        "/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/JMU-Logo-RGB-vert-purple.png"
+    )
+    SALUTAIONS = Path(
+        "/home/cuddebtj/Documents/Python/mom_weekly_rankings_email/mom_weekly_rankings_email/assets/salutations.yaml"
+    )
 
     with open(SALUTAIONS) as file:
         salutation_list = yaml.load(file, Loader=yaml.SafeLoader)
 
 except Exception as e:
-    logger.critical(f'Error: {e}', exc_info=True)
+    logger.critical(f"Error: {e}", exc_info=True)
 
 
 def send_weekly_rankings(week, plain_body, html_body):
 
-    _to = ';'.join(private["email_list"])
+    _to = ";".join(private["email_list"])
     _from = private["mom_email"]
     # _to = 'cuddebtj@gmail.com'
 
     try:
         context = ssl.create_default_context()
 
-        with smtplib.SMTP_SSL(private["host"], private["port"], context=context) as server:
+        with smtplib.SMTP_SSL(
+            private["host"], private["port"], context=context
+        ) as server:
             server.login(_from, private["gmail_app_pass"])
 
             msg = MIMEMultipart("alternative")
             msg["Subject"] = f"MoM FFBL Weekly Rankings: Week {week}"
             msg["From"] = f"{_from}"
             msg["To"] = f"{_to}"
-            jmu_logo = MIMEImage(open(JMU_LOGO_PATH, 'rb').read())
-            jmu_logo.add_header('Content-ID', '<jmu_logo>')
+            jmu_logo = MIMEImage(open(JMU_LOGO_PATH, "rb").read())
+            jmu_logo.add_header("Content-ID", "<jmu_logo>")
             msg.attach(jmu_logo)
             msg.attach(MIMEText(plain_body, "plain"))
             msg.attach(MIMEText(html_body, "html"))
@@ -60,7 +70,8 @@ def send_weekly_rankings(week, plain_body, html_body):
             server.sendmail(_from, _to, msg.as_string())
 
     except Exception as e:
-        logger.critical(f'Error: {e}', exc_info=True)
+        logger.critical(f"Error: {e}", exc_info=True)
+
 
 def main():
 
@@ -88,7 +99,7 @@ def main():
         ]
 
     except Exception as e:
-        logger.error('Data error', exc_info=True)
+        logger.error("Data error", exc_info=True)
 
     try:
         html_rankings = build_table(
@@ -97,36 +108,37 @@ def main():
             font_family="Arial",
             text_align="center",
             width_dict=[
-                "200px", # Team
-                "100px", # Manager
-                "40px", # Cur. Wk Rk
-                "40px", # Prev. Wk Rk
-                "40px", # 2pt Ttl
-                "40px", # 2pt Ttl Rk
-                "40px", # Ttl Pts Win
-                "40px", # Ttl Pts Win Rk
-                "40px", # Win Ttl
-                "40px", # Loss Ttl
-                "40px", # W/L Rk
-                "80px", # Ttl Pts
-                "40px", # Ttl Pts Rk
+                "200px",  # Team
+                "100px",  # Manager
+                "40px",  # Cur. Wk Rk
+                "40px",  # Prev. Wk Rk
+                "40px",  # 2pt Ttl
+                "40px",  # 2pt Ttl Rk
+                "40px",  # Ttl Pts Win
+                "40px",  # Ttl Pts Win Rk
+                "40px",  # Win Ttl
+                "40px",  # Loss Ttl
+                "40px",  # W/L Rk
+                "80px",  # Ttl Pts
+                "40px",  # Ttl Pts Rk
             ],
         )
 
     except Exception as e:
-        logger.error('HTML table error', exc_info=True)
+        logger.error("HTML table error", exc_info=True)
 
     try:
         salutation = salutation_list["salutations"][
-            randint(0, len(salutation_list["salutations"])-1)
+            randint(0, len(salutation_list["salutations"]) - 1)
         ]
 
     except Exception as e:
-        logger.error('Salutation error', exc_info=True)
+        logger.error("Salutation error", exc_info=True)
 
     try:
         plain_body = """\
             Here is the currently weekly rankings!
+            Check out the super awesome, cool, magnificent website for MoM FFBL! https://menofmadison-weeklyrankings.herokuapp.com/ 
             Keep an eye out for more emails/add this email to your safe senders so it doesn't got to spam.
 
             {table}
@@ -144,6 +156,8 @@ def main():
         <html>
         <body>
             <h1>Here is the currently weekly rankings!</h1>
+            <br>
+            <h2 href="https://menofmadison-weeklyrankings.herokuapp.com/">Checkout the website!</h2>
             <br>
             <h2>Keep an eye out for more emails/add this email to your safe senders so it doesn't got to spam.</h2>
             <br>
@@ -163,14 +177,16 @@ def main():
         """
 
         plain_body = plain_body.format(
-            table=tabulate(rankings, headers="firstrow", tablefmt="grid"), salutation=salutation
+            table=tabulate(rankings, headers="firstrow", tablefmt="grid"),
+            salutation=salutation,
         )
         html_body = html_body.format(table=html_rankings, salutation=salutation)
-    
+
     except Exception as e:
-        logger.error('Email body build error', exc_info=True)
+        logger.error("Email body build error", exc_info=True)
 
     send_weekly_rankings(cur_week, plain_body, html_body)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
