@@ -157,7 +157,7 @@ def main():
         <body>
             <h1>Here is the currently weekly rankings!</h1>
             <br>
-            <h2 href="https://menofmadison-weeklyrankings.herokuapp.com/">Checkout the website!</h2>
+            <h2>Checkout the <a href="https://menofmadison-weeklyrankings.herokuapp.com/">website</a>!</h2>
             <br>
             <h2>Keep an eye out for more emails/add this email to your safe senders so it doesn't got to spam.</h2>
             <br>
